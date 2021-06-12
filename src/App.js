@@ -7,9 +7,11 @@ import Footer from "./components/Footer";
 
 function App() {
   const [data, setData] = useState([]);
-  const [search,setSearch] = useState('')
-  const [battles,setBattles] = useState([])
-  
+  const [list, setList] = useState([]);
+  const [count,setCount] = useState([])
+  const [search, setSearch] = useState("");
+  const [battles, setBattles] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,12 +29,58 @@ function App() {
     }
     getData();
   }, []);
+  useEffect(() => {
+    async function getList() {
+      setLoading(true);
+      const response = await fetch("battles.csv");
+      const reader = response.body.getReader();
+      const result = await reader.read(); // raw array
+      const decoder = new TextDecoder("utf-8");
+      const csv = decoder.decode(result.value); // the csv text
+      const results = Papa.parse(csv, { header: true }); // object with { data, errors, meta }
+      const List = results.data.map((c, index) => {
+        return c.location;
+      });
+      setList(List);
+      setLoading(false);
+    }
+    getList();
+  }, []);
+  useEffect(() => {
+    async function getCount() {
+      setLoading(true);
+      const response = await fetch("battles.csv");
+      const reader = response.body.getReader();
+      const result = await reader.read(); // raw array
+      const decoder = new TextDecoder("utf-8");
+      const csv = decoder.decode(result.value); // the csv text
+      const results = Papa.parse(csv, { header: true }); // object with { data, errors, meta }
+      const Count = results.data.map((c, index) => {
+        return c.battle_number;
+                
+      });
+      setCount(Count);
+      setLoading(false);
+    }
+    getCount();
+  }, []);
+  const getList = list.map((c) => {
+    return { c };
+  });
+const getCount = Math.max.apply(0,count)
+  // const getCount = count.map(battles=>{
+  //   return <li key={battles}>{battles} </li>
+  // })
+  // console.log(getList)
   const lowercasedFilter = search.toLowerCase();
-  const filterData = data.filter(item => {
-    return Object.keys(item).some(key =>
+  const filterData = data.filter((item) => {
+    return Object.keys(item).some((key) =>
       item[key].toLowerCase().includes(lowercasedFilter)
     );
   });
+  console.log(list);
+  //  another way of doing the same thing //
+
   // const filterData =  data.filter((types) => {
   //   return (
   //     types.location
@@ -52,11 +100,11 @@ function App() {
   //       .toString()
   //       .toLowerCase()
   //       .indexOf(search.toLocaleLowerCase()) !== -1
-      
+
   //   );
   //   setSearch("")
   // });
-  // get list of the battles locaiton 
+  // get list of the battles locaiton
   // function getList (){
   //   const getList = filterData.map(battles =>{
   //     return <li key={battles.location}> {battles.location} </li>
@@ -64,10 +112,10 @@ function App() {
   // }
   // getList();
 
-  // // get list of the battles Count // number of battles 
+  // // get list of the battles Count // number of battles
   // function getCount (){
-  //   const count = filterData.map(battles=>{
-  //     return console.log(battles.battle_number)
+  //   const getCount = filterData.map(battles=>{
+  //     return <li key={battles}>(battles.battle_number) </li>
   //   })
   // }
   // getCount();
@@ -75,37 +123,40 @@ function App() {
   //   return console.log(battles.name)
   // })
 
-
   console.log(data);
 
- const searchData  = (e) =>{
-    setSearch(e.target.value)
-    
- }
+  const searchData = (e) => {
+    setSearch(e.target.value);
+  };
 
-
- 
- 
   return (
-   
-   <div className="App">
-      <div className="app"></div>
+    <div className="App">
+ 
       <Header />
-      
-      <input value={search} onChange={searchData}/>
-     { filterData.length > 0 && filterData.map((c,index)=>{
-     return   <div key={index}>
+
+      {/* <input value={search} onChange={searchData} />
+
+      <hr />
+      {filterData.length > 0 &&
+        filterData.map((c, index) => {
+          return (
+            <div key={index}>
               {c.location} {c.defender_king} {c.attacker_king}
-           </div>
-       })}
+            </div>
+          );
+        })} */}
       
-        {/* {filterData.length >0 && filterData.map((c,index)=>{
+      <hr />
+      {/* {list.map((c, index) => {
+        return <li key={index}>{c} </li>;
+      })} */}
+      {/* {filterData.length >0 && filterData.map((c,index)=>{
      return
          <div key={index}>
               {c.location}
            </div>
        })} */}
-      <TheMain />
+      <TheMain filterData={filterData} list={list}  search={search} searchData={searchData} getCount={getCount} />
       <Footer />
     </div>
   );
