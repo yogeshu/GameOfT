@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Battles({ list,getCount }) {
   return (
-    <div className="container py-5">
+    <div className="container py-5" id="Battle">
        <div className="card">
            <div className="card-body">
                <p className="bg-blue">

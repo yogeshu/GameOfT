@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 function App() {
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
-  const [count,setCount] = useState([])
+  const [count, setCount] = useState([]);
   const [search, setSearch] = useState("");
   const [battles, setBattles] = useState([]);
 
@@ -29,6 +29,8 @@ function App() {
     }
     getData();
   }, []);
+
+  // we dont need this code as we can take data from first useEffect but for creating the function I have not use DRY
   useEffect(() => {
     async function getList() {
       setLoading(true);
@@ -46,6 +48,8 @@ function App() {
     }
     getList();
   }, []);
+  // we dont need this code as we can take data from first useEffect but for creating the function I have not use DRY
+
   useEffect(() => {
     async function getCount() {
       setLoading(true);
@@ -57,7 +61,6 @@ function App() {
       const results = Papa.parse(csv, { header: true }); // object with { data, errors, meta }
       const Count = results.data.map((c, index) => {
         return c.battle_number;
-                
       });
       setCount(Count);
       setLoading(false);
@@ -67,7 +70,7 @@ function App() {
   const getList = list.map((c) => {
     return { c };
   });
-const getCount = Math.max.apply(0,count)
+  const getCount = Math.max.apply(0, count);
   // const getCount = count.map(battles=>{
   //   return <li key={battles}>{battles} </li>
   // })
@@ -127,11 +130,17 @@ const getCount = Math.max.apply(0,count)
 
   const searchData = (e) => {
     setSearch(e.target.value);
+
+    // let suggestions = [];
+    // if(value.length > 0) {
+    //   const regex = new RegExp(`^${value}`, 'i');
+    //   suggestions = this.items.sort().filter(v => regex.test(v));
+    // }
+    // this.setState(() => ({suggestions, text: value}));
   };
 
   return (
     <div className="App">
- 
       <Header />
 
       {/* <input value={search} onChange={searchData} />
@@ -145,7 +154,7 @@ const getCount = Math.max.apply(0,count)
             </div>
           );
         })} */}
-      
+
       <hr />
       {/* {list.map((c, index) => {
         return <li key={index}>{c} </li>;
@@ -156,7 +165,13 @@ const getCount = Math.max.apply(0,count)
               {c.location}
            </div>
        })} */}
-      <TheMain filterData={filterData} list={list}  search={search} searchData={searchData} getCount={getCount} />
+      <TheMain
+        filterData={filterData}
+        list={list}
+        search={search}
+        searchData={searchData}
+        getCount={getCount}
+      />
       <Footer />
     </div>
   );

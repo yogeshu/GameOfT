@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-export default function Search({ filterData, search, searchData }) {
+export default function Search({ filterData, search, searchData,renderSuggestion }) {
   const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -18,11 +18,12 @@ export default function Search({ filterData, search, searchData }) {
   const classes = useStyles();
   const filMenu = filterData;
   return (
-    <div className="responsive-table">
+    <div className="responsive-table" id="Home">
      
-
-      <input type="text" placeholder="Search Battles" value={search} onChange={searchData} />
-
+           <form onSubmit={(e)=> e.preventDefault()}>      <input type="text" placeholder="Search Battles" value={search} onChange={searchData} className="m-5" />
+    
+      </form>
+         {renderSuggestion}
       {/* <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -43,7 +44,7 @@ export default function Search({ filterData, search, searchData }) {
           </TableBody>
         </Table>
       </TableContainer> */}
-      <table className="table table-responsive-sm m-auto">
+      <table className="table table-responsive-sm ">
         {" "}
         <tr>
           <th> Location</th>

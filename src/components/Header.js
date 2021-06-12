@@ -9,9 +9,9 @@ export default function Header() {
       <span className="navbar-toggler-icon"></span>
     </button>
     <div className="collapse navbar-collapse " id="navbarNavAltMarkup">
-      <div className="navbar-nav d-flex justify-content-end" >
-        <a className="nav-link active" aria-current="page" href="#">Home</a>
-        <a className="nav-link" href="#">Battles</a>
+      <div className="navbar-nav ms-auto" >
+        <a className="nav-link active" aria-current="page" href="#Home">Home</a>
+        <a className="nav-link" href="#Battle">Battles</a>
         <a className="nav-link" href="#">About</a>
       </div>
     </div>
